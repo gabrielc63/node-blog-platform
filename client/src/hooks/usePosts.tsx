@@ -1,21 +1,18 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import api from "../lib/api";
+import { useQuery, QueryObserverResult } from "@tanstack/react-query";
+import { AxiosResponse } from "axios";
+import apiClient from "../lib/api";
+import { PostItem } from "../types/post.types";
 
-export const usePosts = () =>
-  useQuery(["posts"], async () => (await api.get("/posts")).data);
+const fetchPosts = async (): Promise<AxiosResponse<PostItem[], any>> => {
+  return await apiClient.get<PostItem[]>("/posts");
+};
 
-export const usePost = (id: string) =>
-  useQuery(["post", id], async () => (await api.get(`/posts/${id}`)).data);
-
-export const useCreatePost = () => {
-  const queryClient = useQueryClient();
-  return useMutation(
-    async (newPost: { title: string; body: string }) =>
-      (await api.post("/posts", newPost)).data,
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["posts"]);
-      },
+export const useFetchPosts = (): QueryObserverResult<PostItem[], any> => {
+  return useQuery<PostItem[], any>({
+    queryFn: async () => {
+      const { data } = await fetchPosts();
+      return data;
     },
-  );
+    queryKey: ["posts"],
+  });
 };

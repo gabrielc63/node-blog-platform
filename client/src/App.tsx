@@ -1,9 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Layout } from "@/components/layout/Layout";
-import { Home } from "./pages/Home";
+import Home from "./pages/Home";
 import { Editor } from "@/pages/Editor";
-import { Post } from "./pages/Post";
+import Post from "./pages/Post";
 import { PrivateRoute } from "@/components/auth/PrivateRoute";
 
 const queryClient = new QueryClient();
@@ -19,6 +20,7 @@ export default function App() {
           </Routes>
         </div>
       </BrowserRouter>
+      <ReactQueryDevtools />
     </QueryClientProvider>
   );
 }
