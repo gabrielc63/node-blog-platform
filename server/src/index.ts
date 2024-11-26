@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import morgan from "morgan";
 import connectDB from "./config/db";
 import postRoutes from "./routes/postRoutes";
 
@@ -8,6 +9,8 @@ const PORT = 4000;
 
 app.use(cors());
 app.use(express.json());
+
+app.use(morgan("combined"));
 
 // Body parsing
 app.use(express.json({ limit: "10mb" }));
